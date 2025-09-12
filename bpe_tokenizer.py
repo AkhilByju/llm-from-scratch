@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 class BPETokenizer:
 
-    def __init__(self, vocab_size):
+    def __init__(self, vocab_size=1000):
         self.vocab_size = vocab_size
         self.vocab = {}
         self.inv_vocab = {}
@@ -67,23 +67,41 @@ class BPETokenizer:
         self.vocab = {tok: i for i, tok in enumerate(sorted(vocab))}
         self.inv_vocab = {i: tok for tok, i in self.vocab.items()}
 
-    def encode(self, text):
-        """Greedy encode text into IDs"""
+    def encode(self, text, show_progress=False):
+        """Efficient encode using BPE merges (linear-time per word)"""
         output = []
-        i = 0
-        while i < len(text):
-            # Try to match the longest possible subword
-            for j in range(len(text), i, -1):
-                sub = text[i:j]
-                if sub in self.vocab:
-                    output.append(self.vocab[sub])
-                    i = j
-                    break
-            else:
-                # Fallback if nothing matches
-                output.append(self.vocab["<unk>"])
-                i += 1
+        words = text.split(" ")
+
+        # optionally wrap with tqdm
+        iterator = tqdm(words, desc="Encoding text") if show_progress else words
+
+        for word in iterator:
+            tokens = list(word)
+            tokens.append(" ")  
+
+            # Apply merges greedily
+            merge_applied = True
+            while merge_applied:
+                merge_applied = False
+                for a, b in self.merges:
+                    i = 0
+                    while i < len(tokens) - 1:
+                        if tokens[i] == a and tokens[i+1] == b:
+                            tokens[i:i+2] = ["".join([a, b])]
+                            merge_applied = True
+                        else:
+                            i += 1
+
+            # Convert to IDs
+            for tok in tokens:
+                if tok in self.vocab:
+                    output.append(self.vocab[tok])
+                else:
+                    output.append(self.vocab["<unk>"])
+
         return output
+
+
     
     def decode(self, ids):
         return "".join(self.inv_vocab.get(i, "<unk>") for i in ids)
@@ -107,10 +125,12 @@ class BPETokenizer:
             if isinstance(list(self.vocab.values())[0], str) else {i: tok for tok, i in self.vocab.items()}
         self.merges = data["merges"]
 
-
+"""
 with open("input.txt", "r", encoding="utf-8") as f:
     text = f.read()
 
 bpe = BPETokenizer(vocab_size=1000)
 bpe.train(text, print_every=10, sample_size=200000)
 bpe.save("bpe_vocab.json")
+
+"""

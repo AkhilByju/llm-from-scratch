@@ -1,3 +1,4 @@
+import os
 import torch 
 import torch.nn as nn
 from torch.nn import functional as F
@@ -6,15 +7,15 @@ from bpe_tokenizer import BPETokenizer
 
 # hyperparameters
 batch_size = 16
-block_size = 128
-max_iters = 10000
-eval_interval = 500 
+block_size = 256
+max_iters = 5000
+eval_interval = 250 
 learning_rate = 3e-4
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 eval_iters = 200
-n_embd = 128
-n_head = 4
-n_layer = 4
+n_embd = 256
+n_head = 8
+n_layer = 6
 dropout = 0.2
 # --------------
 
@@ -30,19 +31,32 @@ bpe.load("bpe_vocab.json")
 
 vocab_size = len(bpe.vocab)
 
+train_cache = "train_ids.pt"
+val_cache = "val_ids.pt"
+
+if os.path.exists(train_cache) and os.path.exists(val_cache):
+    print("Loading pre-encoded dataset...")
+    train_data = torch.load(train_cache)
+    val_data = torch.load(val_cache)
+else:
+    print("Encoding dataset...")
+    ids = bpe.encode(data, show_progress=True)
+    print("Enconding done, length: ", len(ids))
+    decode = bpe.decode
+
+    # Train-Validation split
+    data = torch.tensor(ids, dtype=torch.long)
+    n = int(0.9*len(data))
+    train_data = data[:n]
+    val_data = data[n:] 
+
+    # Save
+    torch.save(train_data,  train_cache)
+    torch.save(val_data, val_cache)
+    print("Saved encoded dataset to disk.")
+
 encode = bpe.encode
 decode = bpe.decode
-
-test = "The history of science"
-print("ENCODE:", encode(test))
-print("DECODE:", decode(encode(test)))
-
-# Train-Validation split
-ids = encode(data)
-data = torch.tensor(ids, dtype=torch.long)
-n = int(0.9*len(data))
-train_data = data[:n]
-val_data = data[n:] 
 
 # load in the data
 def get_batch(split):
@@ -190,10 +204,9 @@ class LanguageModel(nn.Module):
         
         return idx
 
-model = LanguageModel(vocab_size)
-m = model.to(device)
+model = LanguageModel(vocab_size).to(device)
 
-print(sum(p.numel() for p in m.parameters())/1e6, 'M parameters')
+print(sum(p.numel() for p in model.parameters())/1e6, 'M parameters')
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
 
@@ -220,4 +233,4 @@ if start_text.strip() == "":
 else:
     context = torch.tensor([encode(start_text)], dtype=torch.long, device=device)
 
-print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))
+print(decode(model.generate(context, max_new_tokens=200)[0].tolist()))
