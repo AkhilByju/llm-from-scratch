@@ -5,15 +5,15 @@ from datasets import load_dataset
 
 # hyperparameters
 batch_size = 16
-block_size = 128
+block_size = 256
 max_iters = 5000
 eval_interval = 500 
 learning_rate = 3e-4
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = "mps" if torch.backends.mps.is_available() else "cpu"
 eval_iters = 200
-n_embd = 128
-n_head = 4
-n_layer = 4
+n_embd = 256
+n_head = 8
+n_layer = 6
 dropout = 0.2
 # --------------
 
