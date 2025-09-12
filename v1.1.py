@@ -6,7 +6,7 @@ from datasets import load_dataset
 # hyperparameters
 batch_size = 16
 block_size = 256
-max_iters = 5000
+max_iters = 10000
 eval_interval = 500 
 learning_rate = 3e-4
 device = "mps" if torch.backends.mps.is_available() else "cpu"
