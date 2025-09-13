@@ -1,4 +1,5 @@
 import os
+import math
 import torch 
 import torch.nn as nn
 from torch.nn import functional as F
@@ -10,15 +11,15 @@ from torchtune.modules import RotaryPositionalEmbeddings
 # hyperparameters
 batch_size = 32
 block_size = 512
-max_iters = 9000
-eval_interval = 300 
+max_iters = 5000
+eval_interval = 100 
 learning_rate = 3e-4
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 eval_iters = 200
-n_embd = 512
+n_embd = 384
 n_head = 8
-n_layer = 8
-dropout = 0.2
+n_layer = 6
+dropout = 0.25
 # --------------
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
@@ -239,7 +240,18 @@ model = LanguageModel(vocab_size).to(device)
 
 print(sum(p.numel() for p in model.parameters())/1e6, 'M parameters')
 
-optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=0.01)
+
+def get_lr_scheduler(optimizer, warmup_iters, max_iters):
+    def lr_lambda(iter):
+        if iter < warmup_iters:
+            return iter / warmup_iters  # warmup from 0 → 1
+        progress = (iter - warmup_iters) / (max_iters - warmup_iters)
+        return 0.5 * (1.0 + math.cos(math.pi * progress))  # cosine decay
+    return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
+
+warmup_iters = 200  
+scheduler = get_lr_scheduler(optimizer, warmup_iters, max_iters)
 
 # setup for saving best model
 best_val_loss = float("inf")
@@ -285,6 +297,8 @@ for iter in range(start_iter, max_iters):
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
+    scheduler.step()
+
 
 torch.save({
     "iter": max_iters,
