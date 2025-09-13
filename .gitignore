@@ -215,8 +215,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# data
-train_ids.pt
-val_ids.pt
-v2_*/best_model.pth
-v2_*/checkpoint.pth
+# Ignore large model checkpoints
+*.pth
+*.pt
