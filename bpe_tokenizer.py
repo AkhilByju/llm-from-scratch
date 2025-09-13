@@ -125,12 +125,10 @@ class BPETokenizer:
             if isinstance(list(self.vocab.values())[0], str) else {i: tok for tok, i in self.vocab.items()}
         self.merges = data["merges"]
 
-"""
+
 with open("input.txt", "r", encoding="utf-8") as f:
     text = f.read()
 
-bpe = BPETokenizer(vocab_size=1000)
+bpe = BPETokenizer(vocab_size=500)
 bpe.train(text, print_every=10, sample_size=200000)
-bpe.save("bpe_vocab.json")
-
-"""
+bpe.save("bpe_vocab_500.json")
