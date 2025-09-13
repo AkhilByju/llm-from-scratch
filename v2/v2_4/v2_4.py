@@ -10,16 +10,16 @@ from torchtune.modules import RotaryPositionalEmbeddings
 
 # hyperparameters
 batch_size = 32
-block_size = 512
+block_size = 256
 max_iters = 5000
 eval_interval = 100 
 learning_rate = 3e-4
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 eval_iters = 200
-n_embd = 384
-n_head = 8
+n_embd = 256
+n_head = 6
 n_layer = 6
-dropout = 0.25
+dropout = 0.1
 # --------------
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
@@ -32,7 +32,7 @@ with open(os.path.join(BASE_DIR, "input.txt"), "r", encoding="utf-8") as f:
 
 # Character Tokenization
 bpe = BPETokenizer()
-bpe.load(os.path.join(BASE_DIR, "bpe_vocab.json"))
+bpe.load(os.path.join(BASE_DIR, "bpe_vocab_500.json"))
 
 vocab_size = len(bpe.vocab)
 
