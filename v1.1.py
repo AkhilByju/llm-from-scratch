@@ -1,3 +1,5 @@
+import os
+import math
 import torch 
 import torch.nn as nn
 from torch.nn import functional as F
@@ -184,18 +186,58 @@ class LanguageModel(nn.Module):
         
         return idx
 
-model = LanguageModel(vocab_size)
-m = model.to(device)
+model = LanguageModel(vocab_size).to(device)
 
-print(sum(p.numel() for p in m.parameters())/1e6, 'M parameters')
+print(sum(p.numel() for p in model.parameters())/1e6, 'M parameters')
 
-optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=0.01)
 
-for iter in range(max_iters):
+def get_lr_scheduler(optimizer, warmup_iters, max_iters):
+    def lr_lambda(iter):
+        if iter < warmup_iters:
+            return iter / warmup_iters  # warmup from 0 → 1
+        progress = (iter - warmup_iters) / (max_iters - warmup_iters)
+        return 0.5 * (1.0 + math.cos(math.pi * progress))  # cosine decay
+    return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
+
+warmup_iters = 200  
+scheduler = get_lr_scheduler(optimizer, warmup_iters, max_iters)
+
+# setup for saving best model
+best_val_loss = float("inf")
+
+checkpoint_path = "checkpoint.pth"
+start_iter = 0
+if os.path.exists(checkpoint_path):
+    print("Loading checkpoint...")
+    checkpoint = torch.load(checkpoint_path, map_location=device)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+    start_iter = checkpoint["iter"]
+    print(f"✅ Resumed from iteration {start_iter}")
+
+for iter in range(start_iter, max_iters):
 
     if iter % eval_interval == 0:
         losses = estimate_loss()
         print(f"step {iter}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
+    
+        # Save checkpoint
+        torch.save({
+            "iter": iter,
+            "model_state_dict": model.state_dict(),
+            "optimizer_state_dict": optimizer.state_dict(),
+        }, checkpoint_path)
+        print(f"💾 Saved checkpoint at step {iter}")
+
+        if losses['val'] < best_val_loss:
+            best_val_loss = losses['val']
+            torch.save({
+                "iter": iter,
+                "model_state_dict": model.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+            }, "best_model.pth")
+            print(f"🌟 New best model saved at step {iter} (val loss {best_val_loss:.4f})")
     
     # sample a batch of data
     xb, yb = get_batch('train')
@@ -205,6 +247,15 @@ for iter in range(max_iters):
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
+    scheduler.step()
+
+
+torch.save({
+    "iter": max_iters,
+    "model_state_dict": model.state_dict(),
+    "optimizer_state_dict": optimizer.state_dict(),
+}, checkpoint_path)
+print("✅ Final checkpoint saved.")
 
 # generate from the model
 start_text = input("Enter a starting phrase: ")
@@ -214,4 +265,4 @@ if start_text.strip() == "":
 else:
     context = torch.tensor([encode(start_text)], dtype=torch.long, device=device)
 
-print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))
+print(decode(model.generate(context, max_new_tokens=500)[0].tolist()))
