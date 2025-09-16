@@ -5,23 +5,31 @@ from tqdm import tqdm
 
 class BPETokenizer:
 
-    def __init__(self, vocab_size=1000):
+    def __init__(self, vocab_size=1000, allowed_chars=None):
         self.vocab_size = vocab_size
         self.vocab = {}
         self.inv_vocab = {}
         self.merges = []
+        # Restricting the chars in the vocabulary
+        self.allowed_chars = set(allowed_chars) if allowed_chars else None
     
     def get_stats(self, tokens):
         """Count frequency of adjacent symbol pairs in the tokenized text"""
         pairs = Counter()
         for word in tokens:
             for i in range(len(word) - 1):
-                pairs[(word[i], word[i+1])] += 1
+                a, b = word[i], word[i + 1]
+                if (self.allowed_chars is None) or (set(a+b).issubset(self.allowed_chars)):
+                    pairs[(a, b)] += 1
         return pairs
     
     def merge_pair(self, pair, tokens):
         """Merge the most frequent pair into a new symbol"""
         bigram = ''.join(pair)
+
+        if self.allowed_chars and not set(bigram).issubset(self.allowed_chars):
+            return tokens  
+        
         new_tokens = []
         for word in tokens:
             new_word = []
@@ -47,8 +55,13 @@ class BPETokenizer:
             t.append(" ")   # re-add the space at the end of each word
         tokens[-1].pop()     # remove trailing space from last word
 
-        # start vocab with characters + space + <unk>
-        vocab = set(ch for word in tokens for ch in word)
+        # Start vocab with ONLY allowed characters
+        if self.allowed_chars:
+            vocab = set(self.allowed_chars)
+        else:
+            vocab = set(ch for word in tokens for ch in word)
+
+        # Add the extra chars
         vocab.add(" ")
         vocab.add("<unk>")
 
@@ -60,8 +73,9 @@ class BPETokenizer:
             best = max(pairs, key=pairs.get)
             tokens = self.merge_pair(best, tokens)
             new_symbol = ''.join(best)
-            vocab.add(new_symbol)
-            self.merges.append(best)
+            if self.allowed_chars is None or set(new_symbol).issubset(self.allowed_chars):
+                vocab.add(new_symbol)
+                self.merges.append(best)
 
         # assign IDs
         self.vocab = {tok: i for i, tok in enumerate(sorted(vocab))}
@@ -100,8 +114,6 @@ class BPETokenizer:
                     output.append(self.vocab["<unk>"])
 
         return output
-
-
     
     def decode(self, ids):
         return "".join(self.inv_vocab.get(i, "<unk>") for i in ids)
@@ -125,13 +137,17 @@ class BPETokenizer:
             if isinstance(list(self.vocab.values())[0], str) else {i: tok for tok, i in self.vocab.items()}
         self.merges = data["merges"]
 
+
 """
 
 with open("input.txt", "r", encoding="utf-8") as f:
     text = f.read()
 
-bpe = BPETokenizer(vocab_size=500)
+allowed_chars = sorted(list(set(text)))
+allowed_chars = allowed_chars[:102]
+
+bpe = BPETokenizer(vocab_size=500, allowed_chars=allowed_chars)
 bpe.train(text, print_every=10, sample_size=200000)
-bpe.save("bpe_vocab_500.json")
+bpe.save("bpe_vocab_english_500.json")
 
 """

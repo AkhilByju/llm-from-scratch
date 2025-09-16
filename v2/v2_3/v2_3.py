@@ -1,5 +1,6 @@
 import os
 import math
+from pathlib import Path
 import torch 
 import torch.nn as nn
 from torch.nn import functional as F
@@ -22,7 +23,7 @@ n_layer = 6
 dropout = 0.25
 # --------------
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+BASE_DIR = Path(__file__).resolve().parent.parent 
 
 torch.manual_seed(1337)
 
