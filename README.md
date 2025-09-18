@@ -42,7 +42,7 @@ Scope: pretraining on WikiText, experimenting with hyperparameters \
 | v0      | ✅ done    | Baseline: tokenizer + simple bigram model                                          | None. Was just meant for a baseline model |
 | v1      | ✅ done    | Shifted to transformer architecture (added multi-head attention, embeddings, etc ) | Add ALiBi and GeLU                        |
 | v2      | ✅ done    | Shifted to BPE Tokenization, uses RoPE and GeLU                                    | Experiment with vocab sizes               |
-| v3      | 🔄 ongoing | Shifted vocabulary to only English Words, switched from RoPE to AliBi              | Increase Vocab Size                       |
+| v3      | 🔄 ongoing | Shifted vocabulary to only English Words, switched from RoPE to AliBi              | Increase Vocab Size + Scaffold-BPE        |
 | v4      | 🚧 planned | Undecided                                                                          | Visualize embeddings                      |
 
 ## Setup / Requirements
@@ -60,3 +60,7 @@ Scope: pretraining on WikiText, experimenting with hyperparameters \
 ## Liscence
 
 ## References
+
+- [Attention Is All You Need (Vaswani et al., 2017)](https://arxiv.org/abs/1706.03762)
+- [Scaffold-BPE: Enhancing Byte Pair Encoding for Large Language Models with Simple and Effective Scaffold Token Removal](https://arxiv.org/abs/2404.17808)
+- Karpathy’s [nanoGPT](https://github.com/karpathy/nanoGPT) as inspiration
