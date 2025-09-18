@@ -5,6 +5,8 @@ import torch.nn as nn
 from pathlib import Path
 from torch.nn import functional as F
 from datasets import load_dataset
+from wikitext.bpe_tokenizer import BPETokenizer
+from torchtune.modules import RotaryPositionalEmbeddings
 
 
 # hyperparameters
@@ -16,38 +18,51 @@ learning_rate = 3e-4
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 eval_iters = 200
 n_embd = 256
-n_head = 8
+n_head = 6
 n_layer = 6
 dropout = 0.2
 # --------------
 
-# File Names
-checkpoint_path = "checkpoint.pth"
-best_model_path = "best_model.pth"
-# ----------
-
-
 torch.manual_seed(1337)
 
+BASE_DIR = Path(__file__).resolve().parent.parent 
+
 # Get the dataset
-with open(os.path.join("input.txt"), "r", encoding="utf-8") as f:
+with open(os.path.join(BASE_DIR, "input.txt"), "r", encoding="utf-8") as f:
     data = f.read()
 
 # Character Tokenization
-# Character Tokenization
-chars = sorted(list(set(data)))
-vocab_size = len(chars)
-stoi = { ch:i for i, ch in enumerate(chars) }
-itos = { i:ch for i, ch in enumerate(chars) }
+bpe = BPETokenizer()
+bpe.load(os.path.join(BASE_DIR, "bpe_vocab_english_500.json"))
 
-encode = lambda s: [stoi[c] for c in s]
-decode = lambda l: ''.join([itos[i] for i in l])
+vocab_size = len(bpe.vocab)
 
-# Train-Validation split
-data = torch.tensor(encode(data), dtype=torch.long)
-n = int(0.9*len(data))
-train_data = data[:n]
-val_data = data[n:] 
+train_cache = "train_ids.pt"
+val_cache = "val_ids.pt"
+
+if os.path.exists(os.path.join(BASE_DIR, train_cache)) and os.path.exists(os.path.join(BASE_DIR, val_cache)):
+    print("Loading pre-encoded dataset...")
+    train_data = torch.load(os.path.join(BASE_DIR, train_cache))
+    val_data = torch.load(os.path.join(BASE_DIR, val_cache))
+else:
+    print("Encoding dataset...")
+    ids = bpe.encode(data, show_progress=True)
+    print("Enconding done, length: ", len(ids))
+    decode = bpe.decode
+
+    # Train-Validation split
+    data = torch.tensor(ids, dtype=torch.long)
+    n = int(0.9*len(data))
+    train_data = data[:n]
+    val_data = data[n:] 
+
+    # Save
+    torch.save(train_data,  os.path.join(BASE_DIR, train_cache))
+    torch.save(val_data, os.path.join(BASE_DIR, val_cache))
+    print("Saved encoded dataset to disk.")
+
+encode = bpe.encode
+decode = bpe.decode
 
 # load in the data
 def get_batch(split):
@@ -261,10 +276,11 @@ scheduler = get_lr_scheduler(optimizer, warmup_iters, max_iters)
 # setup for saving best model
 best_val_loss = float("inf")
 
+checkpoint_path = "checkpoint.pth"
 start_iter = 0
-if os.path.exists(os.path.join(checkpoint_path)):
+if os.path.exists(os.path.join(BASE_DIR, checkpoint_path)):
     print("Loading checkpoint...")
-    checkpoint = torch.load(os.path.join(checkpoint_path), map_location=device)
+    checkpoint = torch.load(os.path.join(BASE_DIR, checkpoint_path), map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
     optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
     start_iter = checkpoint["iter"]
@@ -281,7 +297,7 @@ for iter in range(start_iter, max_iters):
             "iter": iter,
             "model_state_dict": model.state_dict(),
             "optimizer_state_dict": optimizer.state_dict(),
-        }, os.path.join(checkpoint_path))
+        }, os.path.join(BASE_DIR, checkpoint_path))
         print(f"💾 Saved checkpoint at step {iter}")
 
         if losses['val'] < best_val_loss:
@@ -290,7 +306,7 @@ for iter in range(start_iter, max_iters):
                 "iter": iter,
                 "model_state_dict": model.state_dict(),
                 "optimizer_state_dict": optimizer.state_dict(),
-            }, os.path.join(best_model_path))
+            }, os.path.join(BASE_DIR, "best_model.pth"))
             print(f"🌟 New best model saved at step {iter} (val loss {best_val_loss:.4f})")
     
     # sample a batch of data
