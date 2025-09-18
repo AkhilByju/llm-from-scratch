@@ -37,13 +37,13 @@ Scope: pretraining on WikiText, experimenting with hyperparameters \
 
 ## Versions / Roadmap
 
-| Version | Status     | What changed / explored                    | Next steps                  |
-| ------- | ---------- | ------------------------------------------ | --------------------------- |
-| v0      | ✅ done    | Baseline: tokenizer + simple model         | Scale to larger dataset     |
-| v1      | ✅ done    | Improved tokenizer, batching               | Optimize memory usage       |
-| v2      | ✅ done    | Added transformer attention                | Experiment with vocab sizes |
-| v3      | 🔄 ongoing | Scaling layers, experimenting with dropout | Add evaluation metrics      |
-| v4      | 🚧 planned | Integrate ALiBi, compare with RoPE         | Visualize embeddings        |
+| Version | Status     | What changed / explored                                                            | Next steps                                |
+| ------- | ---------- | ---------------------------------------------------------------------------------- | ----------------------------------------- |
+| v0      | ✅ done    | Baseline: tokenizer + simple bigram model                                          | None. Was just meant for a baseline model |
+| v1      | ✅ done    | Shifted to transformer architecture (added multi-head attention, embeddings, etc ) | Add ALiBi and GeLU                        |
+| v2      | ✅ done    | Shifted to BPE Tokenization, uses RoPE and GeLU                                    | Experiment with vocab sizes               |
+| v3      | 🔄 ongoing | Shifted vocabulary to only English Words, switched from RoPE to AliBi              | Increase Vocab Size                       |
+| v4      | 🚧 planned | Undecided                                                                          | Visualize embeddings                      |
 
 ## Setup / Requirements
 
