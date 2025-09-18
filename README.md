@@ -27,6 +27,13 @@ Scope: pretraining on WikiText, experimenting with hyperparameters \
 
 ## What's in this repo
 
+### These are the main models and each has their own iterative improvements
+
+- `v0.py` - baseline model with character tokenization
+- `v1.py` - making the transformer more robust (still with character tokenization)
+- `v2.py` - BPE tokenization
+- `v3.py` - BPE tokenization but only with an English Vocabulary
+
 ## Versions / Roadmap
 
 ## Setup / Requirements
