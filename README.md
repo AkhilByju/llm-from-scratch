@@ -27,14 +27,23 @@ Scope: pretraining on WikiText, experimenting with hyperparameters \
 
 ## What's in this repo
 
-### These are the main models and each has their own iterative improvements
-
-- `v0.py` - baseline model with character tokenization
-- `v1.py` - making the transformer more robust (still with character tokenization)
-- `v2.py` - BPE tokenization
-- `v3.py` - BPE tokenization but only with an English Vocabulary
+- `v0.py` — baseline model
+- `v1.py`, `v1.1.py`, `v2.py`, `v3.py` — iterative improvements
+- `bpe_tokenizer.py` — Byte Pair Encoding implementation
+- `bpe_vocab.json` / `bpe_vocab_500.json` — vocab artifacts
+- `input.txt` — sample dataset
+- `train_ids.pt`, `val_ids.pt` — preprocessed training/validation sets
+- Notebooks — prototyping & analysis
 
 ## Versions / Roadmap
+
+| Version | Status     | What changed / explored                    | Next steps                  |
+| ------- | ---------- | ------------------------------------------ | --------------------------- |
+| v0      | ✅ done    | Baseline: tokenizer + simple model         | Scale to larger dataset     |
+| v1      | ✅ done    | Improved tokenizer, batching               | Optimize memory usage       |
+| v2      | ✅ done    | Added transformer attention                | Experiment with vocab sizes |
+| v3      | 🔄 ongoing | Scaling layers, experimenting with dropout | Add evaluation metrics      |
+| v4      | 🚧 planned | Integrate ALiBi, compare with RoPE         | Visualize embeddings        |
 
 ## Setup / Requirements
 
