@@ -24,3 +24,23 @@ Scope: pretraining on WikiText, experimenting with hyperparameters \
 - Understand tokenization and vocobulation methods
 - Build progressively more capable models to better understand LLMs
 - Compare different architectures and positional encodings (e.g., ALiBi vs. RoPE)
+
+## What's in this repo
+
+## Versions / Roadmap
+
+## Setup / Requirements
+
+## How to use
+
+## Design & Architecture
+
+## Key Experiments & Results
+
+## Challenges & Learnings
+
+## How to Contribute / Expand
+
+## Liscence
+
+## References
