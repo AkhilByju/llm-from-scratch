@@ -68,8 +68,8 @@ python v3.py
 
 Create tokenization:
 
-Uncomment the following code found at the bottom of bpe_tokenizer.py \
-Modify any parameters
+- Uncomment the following code found at the bottom of bpe_tokenizer.py \
+- Modify any parameters
 
 ```python
     with open("input.txt", "r", encoding="utf-8") as f:
