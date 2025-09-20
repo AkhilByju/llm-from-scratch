@@ -54,6 +54,39 @@ Scope: pretraining on WikiText, experimenting with hyperparameters \
 
 ## How to use
 
+Train a baseline model:
+
+```bash
+python v0.py
+```
+
+Train with a later version:
+
+```bash
+python v3.py
+```
+
+Create tokenization:
+
+Uncomment the following code found at the bottom of bpe_tokenizer.py /
+Modify any parameters
+
+```python
+    with open("input.txt", "r", encoding="utf-8") as f:
+        text = f.read()
+
+    allowed_chars = sorted(list(set(text)))
+    allowed_chars = allowed_chars[:102]
+
+    bpe = BPETokenizer(vocab_size=500, allowed_chars=allowed_chars)
+    bpe.train(text, print_every=10, sample_size=200000)
+    bpe.save("bpe_vocab_english_500.json")
+```
+
+```bash
+python bpe_tokenizer.py
+```
+
 ## Design & Architecture
 
 ## Key Experiments & Results
