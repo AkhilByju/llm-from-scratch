@@ -47,6 +47,11 @@ Scope: pretraining on WikiText, experimenting with hyperparameters \
 
 ## Setup / Requirements
 
+- **Python**: 3.x
+- **Libraries**: PyTorch, NumPy, etc. (see `requirements.txt`)
+- **Hardware**: GPU recommended, but CPU mode supported
+- **Data**: place text data in `input.txt` or custom dataset
+
 ## How to use
 
 ## Design & Architecture
