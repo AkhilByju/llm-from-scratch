@@ -89,6 +89,17 @@ python bpe_tokenizer.py
 
 ## Design & Architecture
 
+- **Tokenization**:
+
+  - V1 uses simple character tokenization. V2 and above use Byte \
+  - Pair Encoding to pick the vocabulary.
+
+- **Model Architecture**:
+
+- **Training Loop**:
+
+- **Evaulation**:
+
 ## Key Experiments & Results
 
 ## Challenges & Learnings
