@@ -68,7 +68,7 @@ python v3.py
 
 Create tokenization:
 
-Uncomment the following code found at the bottom of bpe_tokenizer.py /
+Uncomment the following code found at the bottom of bpe_tokenizer.py \
 Modify any parameters
 
 ```python
