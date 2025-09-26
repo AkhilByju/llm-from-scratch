@@ -96,9 +96,18 @@ python bpe_tokenizer.py
 
 - **Model Architecture**:
 
+  - embedding layers --> (transformer / FFN depending on version)
+
 - **Training Loop**:
 
+  - Cross-Entropy Loss
+  - AdamW Optimizer
+
 - **Evaulation**:
+
+  - validation loss
+  - perplexity
+  - generated samples
 
 ## Key Experiments & Results
 
