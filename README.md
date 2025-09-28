@@ -111,16 +111,15 @@ python bpe_tokenizer.py
 
 ## Key Experiments & Results
 
-- Tested vocab sizes of 500 vs 1000
-- Smaller validation loss didn't necesarily lead to better qualititative inferences from the model
-  - Likely because of the small nature of the dataset used
-  - In the future, for more robust models, scaling the dataset would be needed
-
 ## Challenges & Learnings
 
 - Memory bottlenecks with large vocab embeddings
 - Tokenization edge cases (handling rare tokens)
 - Training instability in deeper models
+- Tested vocab sizes of 500 vs 1000
+- Smaller validation loss didn't necesarily lead to better qualititative inferences from the model
+  - Likely because of the small nature of the dataset used
+  - In the future, for more robust models, scaling the dataset would be needed
 
 ## How to Contribute / Expand
 
