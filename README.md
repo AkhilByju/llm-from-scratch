@@ -43,7 +43,7 @@ Scope: pretraining on WikiText, experimenting with hyperparameters \
 | v1      | ✅ done    | Shifted to transformer architecture (added multi-head attention, embeddings, etc ) | Add ALiBi and GeLU                        |
 | v2      | ✅ done    | Shifted to BPE Tokenization, uses RoPE and GeLU                                    | Experiment with vocab sizes               |
 | v3      | 🔄 ongoing | Shifted vocabulary to only English Words, switched from RoPE to AliBi              | Increase Vocab Size + Scaffold-BPE        |
-| v4      | 🚧 planned | Undecided                                                                          | Visualize embeddings                      |
+| v4      | 🚧 planned | Vector Product                                                                     | Visualize embeddings                      |
 
 ## Setup / Requirements
 
@@ -118,9 +118,20 @@ python bpe_tokenizer.py
 
 ## Challenges & Learnings
 
+- Memory bottlenecks with large vocab embeddings
+- Tokenization edge cases (handling rare tokens)
+- Training instability in deeper models
+
 ## How to Contribute / Expand
 
+- Fork the repo and try different tokenization methods
+- Swap architectures (RNN → Transformer → etc.)
+- Share results, plots, or refinements to training loops
+- Open issues for discussions or bugs
+
 ## Liscence
+
+MIT Liscence
 
 ## References
 
