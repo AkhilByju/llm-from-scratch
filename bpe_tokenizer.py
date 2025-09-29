@@ -50,9 +50,12 @@ class BPETokenizer:
             words = text.split(" ")[:sample_size]
             text = " ".join(words)
 
+        punctuation = set("!#$%&'()*+,-./:;<=>?@[\]^_`}~¡¢£¥")
+
         tokens = [list(word) for word in text.split(" ")]
         for t in tokens:
-            t.append(" ")   # re-add the space at the end of each word
+            if t not in punctuation:
+                t.append(" ")   # re-add the space at the end of each word
         tokens[-1].pop()     # remove trailing space from last word
 
         # Start vocab with ONLY allowed characters
