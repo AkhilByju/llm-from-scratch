@@ -120,6 +120,7 @@ python bpe_tokenizer.py
 - Tokenization edge cases (handling rare tokens)
   - It is still a struggle to handle the punctuation
     - for some reason the punctuation is always surrounded by spaces, I don't know if this is because of the tokenization or the model not understanding punctuation enough. Or something wrong with how I do inference.
+    - BPE tokenization always adds a space to the end of the word, however, this is a problem because sometimes you don't want to have a space at the end of the word. So I might have to only have spaces as a token and not a word + space as one token.
 - Training instability in deeper models
 - Tested vocab sizes of 500 vs 1000
 - Smaller validation loss didn't necesarily lead to better qualititative inferences from the model
