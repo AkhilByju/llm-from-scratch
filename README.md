@@ -118,6 +118,8 @@ python bpe_tokenizer.py
 
 - Memory bottlenecks with large vocab embeddings
 - Tokenization edge cases (handling rare tokens)
+  - It is still a struggle to handle the punctuation
+    - for some reason the punctuation is always surrounded by spaces, I don't know if this is because of the tokenization or the model not understanding punctuation enough. Or something wrong with how I do inference.
 - Training instability in deeper models
 - Tested vocab sizes of 500 vs 1000
 - Smaller validation loss didn't necesarily lead to better qualititative inferences from the model
