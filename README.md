@@ -111,8 +111,9 @@ python bpe_tokenizer.py
 
 ## Key Experiments & Results
 
-- **[v1: Transformer baseline](results/v1.md)** → hit 1.45 loss in 900 iterations, plateaued earlier
-- **[v2: BPE Tokenization with RoPE and GeLu](results/v2.md)** → improved stability with larger batch size
+- **[v1: Transformer baseline](results/v1.md)**
+- **[v2: BPE Tokenization](results/v2.md)**
+- **[v2: BPE Tokenization with an English only vocabulary](results/v3.md)**
 
 ## Challenges & Learnings
 
