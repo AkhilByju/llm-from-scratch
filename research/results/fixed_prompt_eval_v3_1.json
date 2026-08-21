@@ -1,0 +1,167 @@
+{
+  "model": "v3_1",
+  "checkpoint": "v3/v3_1/best_modelv3_1.pth",
+  "command": [
+    "/opt/anaconda3/bin/python",
+    "/Users/byjukollon/projects/llm_from_scratch/wikitext/v3/v3_1/v3_1.py"
+  ],
+  "prompts": [
+    "The history of language",
+    "In the early twentieth century",
+    "The city was known for",
+    "According to the study",
+    ""
+  ],
+  "results": [
+    {
+      "prompt": "The history of language",
+      "returncode": 0,
+      "elapsed_seconds": 5.490052375011146,
+      "generated": "The history of language near Galar II 's buildas of 1820 , some of the parish of the Levitar . While must meet with the popularity of Tranimisboings , Galvary Constagifio by Sciator , as wrote d Stitlers II + . \n\n\n = = ForpersuGalars = ence that pran against them 400 BC ( 154) @.@ .194 ) was a done by 240 Wagnerier size . AccCE was in early 269 and 12ong or 124 . A decadery divine each of forestons runs along with a three @-@ lane Norway recorded observatar service for their versmall military visit love . \" \n\n The dipartment plays from E2 's six @-@ controduced household in the British road crowdly , these goals ' Burbrush metrops and ground on erots . In also , Egypt Wales defended Tatta in 18",
+      "continuation": "near Galar II 's buildas of 1820 , some of the parish of the Levitar . While must meet with the popularity of Tranimisboings , Galvary Constagifio by Sciator , as wrote d Stitlers II + . \n\n\n = = ForpersuGalars = ence that pran against them 400 BC ( 154) @.@ .194 ) was a done by 240 Wagnerier size . AccCE was in early 269 and 12ong or 124 . A decadery divine each of forestons runs along with a three @-@ lane Norway recorded observatar service for their versmall military visit love . \" \n\n The dipartment plays from E2 's six @-@ controduced household in the British road crowdly , these goals ' Burbrush metrops and ground on erots . In also , Egypt Wales defended Tatta in 18",
+      "continuation_words": 131,
+      "words_per_second": 23.861338845557743,
+      "stdout": "6.443867 M parameters\nLoading checkpoint...\nResumed from iteration 2100\nEnter a starting phrase: The history of language near Galar II 's buildas of 1820 , some of the parish of the Levitar . While must meet with the popularity of Tranimisboings , Galvary Constagifio by Sciator , as wrote d Stitlers II + . \n\n\n = = ForpersuGalars = ence that pran against them 400 BC ( 154) @.@ .194 ) was a done by 240 Wagnerier size . AccCE was in early 269 and 12ong or 124 . A decadery divine each of forestons runs along with a three @-@ lane Norway recorded observatar service for their versmall military visit love . \" \n\n The dipartment plays from E2 's six @-@ controduced household in the British road crowdly , these goals ' Burbrush metrops and ground on erots . In also , Egypt Wales defended Tatta in 18\n",
+      "stderr": "",
+      "metrics": {
+        "chars": 703,
+        "words": 135,
+        "distinct_1": 0.7777777777777778,
+        "distinct_2": 0.9925373134328358,
+        "repeated_bigram_rate": 0.014925373134328358,
+        "repeated_trigram_rate": 0.0,
+        "punctuation_spacing": {
+          "space_before_period": 7,
+          "space_before_comma": 5,
+          "space_before_semicolon": 0,
+          "space_before_colon": 0,
+          "space_before_question": 0,
+          "space_before_exclamation": 0,
+          "space_after_open_paren": 1,
+          "space_before_close_paren": 1,
+          "artifact_at_period_at": 1
+        }
+      }
+    },
+    {
+      "prompt": "In the early twentieth century",
+      "returncode": 0,
+      "elapsed_seconds": 5.156227624975145,
+      "generated": "In the early twentieth century into Wales 100 years and Wales rather thers by Jacky , in 1980 Cacsison of the 17th to 20th @-@ centurn of ESamian poetry or \" burnt in The Fiking Act is one of the worst person who have it was elected to criport doubled on the Glemons of Byon , and others available by the continental terms of Jacob Thomsky \" . \n\n Later that son Peters has distinct from the popularity of period , which was extended on his fur trade . He is probab6 . He is uncited together large fitting , as a court facilitat. ! Now like Macfialdyn ( Aramachitor of Schasson ) , <unk> ( in the collector of by Seaga Post , and not compared with a one of whizes by a Mary who got their only his poles 's own types of pledge the bond ) with her going drug c",
+      "continuation": "into Wales 100 years and Wales rather thers by Jacky , in 1980 Cacsison of the 17th to 20th @-@ centurn of ESamian poetry or \" burnt in The Fiking Act is one of the worst person who have it was elected to criport doubled on the Glemons of Byon , and others available by the continental terms of Jacob Thomsky \" . \n\n Later that son Peters has distinct from the popularity of period , which was extended on his fur trade . He is probab6 . He is uncited together large fitting , as a court facilitat. ! Now like Macfialdyn ( Aramachitor of Schasson ) , <unk> ( in the collector of by Seaga Post , and not compared with a one of whizes by a Mary who got their only his poles 's own types of pledge the bond ) with her going drug c",
+      "continuation_words": 148,
+      "words_per_second": 28.703154857464895,
+      "stdout": "6.443867 M parameters\nLoading checkpoint...\nResumed from iteration 2100\nEnter a starting phrase: In the early twentieth century into Wales 100 years and Wales rather thers by Jacky , in 1980 Cacsison of the 17th to 20th @-@ centurn of ESamian poetry or \" burnt in The Fiking Act is one of the worst person who have it was elected to criport doubled on the Glemons of Byon , and others available by the continental terms of Jacob Thomsky \" . \n\n Later that son Peters has distinct from the popularity of period , which was extended on his fur trade . He is probab6 . He is uncited together large fitting , as a court facilitat. ! Now like Macfialdyn ( Aramachitor of Schasson ) , <unk> ( in the collector of by Seaga Post , and not compared with a one of whizes by a Mary who got their only his poles 's own types of pledge the bond ) with her going drug c\n",
+      "stderr": "",
+      "metrics": {
+        "chars": 757,
+        "words": 153,
+        "distinct_1": 0.6993464052287581,
+        "distinct_2": 0.9671052631578947,
+        "repeated_bigram_rate": 0.06578947368421052,
+        "repeated_trigram_rate": 0.013245033112582781,
+        "punctuation_spacing": {
+          "space_before_period": 3,
+          "space_before_comma": 6,
+          "space_before_semicolon": 0,
+          "space_before_colon": 0,
+          "space_before_question": 0,
+          "space_before_exclamation": 1,
+          "space_after_open_paren": 2,
+          "space_before_close_paren": 2,
+          "artifact_at_period_at": 0
+        }
+      }
+    },
+    {
+      "prompt": "The city was known for",
+      "returncode": 0,
+      "elapsed_seconds": 5.315919625107199,
+      "generated": "The city was known for the San Medshire in 1919 , and the dizebuters , burnic and asteroia and Sanzunland had all floys of meals . In exception folds eastines and cross the Journa Christklist Magazines of all parts . \n\n Rikker Elervira employed similartic gutubes in the Invadu Marshry host the true party and the Portiswamp from communion . It was first synths program by Ajella and Riesule astroes Belch firms and <unk>ldiities in a new town Testacher Stryford ( godct ) offsegment ) into media Marttin Thomas , for popular fan of Afro , along econogical crising HThe Today Through . The Covendar meaning San Lucto Pita , a relationship with with Bono Crazy in Scrib , the stand",
+      "continuation": "the San Medshire in 1919 , and the dizebuters , burnic and asteroia and Sanzunland had all floys of meals . In exception folds eastines and cross the Journa Christklist Magazines of all parts . \n\n Rikker Elervira employed similartic gutubes in the Invadu Marshry host the true party and the Portiswamp from communion . It was first synths program by Ajella and Riesule astroes Belch firms and <unk>ldiities in a new town Testacher Stryford ( godct ) offsegment ) into media Marttin Thomas , for popular fan of Afro , along econogical crising HThe Today Through . The Covendar meaning San Lucto Pita , a relationship with with Bono Crazy in Scrib , the stand",
+      "continuation_words": 115,
+      "words_per_second": 21.63313370218252,
+      "stdout": "6.443867 M parameters\nLoading checkpoint...\nResumed from iteration 2100\nEnter a starting phrase: The city was known for the San Medshire in 1919 , and the dizebuters , burnic and asteroia and Sanzunland had all floys of meals . In exception folds eastines and cross the Journa Christklist Magazines of all parts . \n\n Rikker Elervira employed similartic gutubes in the Invadu Marshry host the true party and the Portiswamp from communion . It was first synths program by Ajella and Riesule astroes Belch firms and <unk>ldiities in a new town Testacher Stryford ( godct ) offsegment ) into media Marttin Thomas , for popular fan of Afro , along econogical crising HThe Today Through . The Covendar meaning San Lucto Pita , a relationship with with Bono Crazy in Scrib , the stand \n",
+      "stderr": "",
+      "metrics": {
+        "chars": 680,
+        "words": 120,
+        "distinct_1": 0.725,
+        "distinct_2": 0.9915966386554622,
+        "repeated_bigram_rate": 0.01680672268907563,
+        "repeated_trigram_rate": 0.0,
+        "punctuation_spacing": {
+          "space_before_period": 4,
+          "space_before_comma": 6,
+          "space_before_semicolon": 0,
+          "space_before_colon": 0,
+          "space_before_question": 0,
+          "space_before_exclamation": 0,
+          "space_after_open_paren": 1,
+          "space_before_close_paren": 2,
+          "artifact_at_period_at": 0
+        }
+      }
+    },
+    {
+      "prompt": "According to the study",
+      "returncode": 0,
+      "elapsed_seconds": 5.105169124901295,
+      "generated": "According to the study that it mudside . \n\n\n = Citru crowd ack the season posit the deice by Blamen , Daily , which was presided that the )Brian translation turnt until Earro , which better Brian Masst . Dession of Salyley and Flanquizer John Hown back turened on obsoles by the drive of Sri By . The season was only prepared apart from Nos. Saden , last 3 minute sigence from grarked money , and the route inside is erecgetically complex , as Sennaire @-@ Payns turned with his seconsix minute episode of Maremuk . Trick 's arrike who had to finish the collapse of several weeks during the season , passed office by much of the other new quarter honour ridening the 2015 BCP National . The glatings were published for the history . However , the Priestrol Christi",
+      "continuation": "that it mudside . \n\n\n = Citru crowd ack the season posit the deice by Blamen , Daily , which was presided that the )Brian translation turnt until Earro , which better Brian Masst . Dession of Salyley and Flanquizer John Hown back turened on obsoles by the drive of Sri By . The season was only prepared apart from Nos. Saden , last 3 minute sigence from grarked money , and the route inside is erecgetically complex , as Sennaire @-@ Payns turned with his seconsix minute episode of Maremuk . Trick 's arrike who had to finish the collapse of several weeks during the season , passed office by much of the other new quarter honour ridening the 2015 BCP National . The glatings were published for the history . However , the Priestrol Christi",
+      "continuation_words": 136,
+      "words_per_second": 26.63966592931032,
+      "stdout": "6.443867 M parameters\nLoading checkpoint...\nResumed from iteration 2100\nEnter a starting phrase: According to the study that it mudside . \n\n\n = Citru crowd ack the season posit the deice by Blamen , Daily , which was presided that the )Brian translation turnt until Earro , which better Brian Masst . Dession of Salyley and Flanquizer John Hown back turened on obsoles by the drive of Sri By . The season was only prepared apart from Nos. Saden , last 3 minute sigence from grarked money , and the route inside is erecgetically complex , as Sennaire @-@ Payns turned with his seconsix minute episode of Maremuk . Trick 's arrike who had to finish the collapse of several weeks during the season , passed office by much of the other new quarter honour ridening the 2015 BCP National . The glatings were published for the history . However , the Priestrol Christi\n",
+      "stderr": "",
+      "metrics": {
+        "chars": 764,
+        "words": 140,
+        "distinct_1": 0.7214285714285714,
+        "distinct_2": 0.9784172661870504,
+        "repeated_bigram_rate": 0.04316546762589928,
+        "repeated_trigram_rate": 0.0,
+        "punctuation_spacing": {
+          "space_before_period": 6,
+          "space_before_comma": 8,
+          "space_before_semicolon": 0,
+          "space_before_colon": 0,
+          "space_before_question": 0,
+          "space_before_exclamation": 0,
+          "space_after_open_paren": 0,
+          "space_before_close_paren": 1,
+          "artifact_at_period_at": 0
+        }
+      }
+    },
+    {
+      "prompt": "",
+      "returncode": 0,
+      "elapsed_seconds": 4.80331666697748,
+      "generated": "during the twenty patches against while Forory Rowley was qualified to Quainite to his beneiinous . Many clera version of Katyqu and premised a fighting which Henry at behelp Sankangham , requiring Sundismary peace , forcted a hailoviowitary message to Malahappu 's main green and feelings teater for the demoll army , but when I cancripous , two coins suffership personally loozly staff and groups . \n\n In July 2007 the Big studynists for the midfield ended ; Wallace pushed from Wunits Imob. sak wrote sevas heralf with HolCE scame @-@ 4 . However , 20 April 1 , The Secondary Chiklds during Humm was reong a categraniizer who won his wife Veronyman growning .",
+      "continuation": "during the twenty patches against while Forory Rowley was qualified to Quainite to his beneiinous . Many clera version of Katyqu and premised a fighting which Henry at behelp Sankangham , requiring Sundismary peace , forcted a hailoviowitary message to Malahappu 's main green and feelings teater for the demoll army , but when I cancripous , two coins suffership personally loozly staff and groups . \n\n In July 2007 the Big studynists for the midfield ended ; Wallace pushed from Wunits Imob. sak wrote sevas heralf with HolCE scame @-@ 4 . However , 20 April 1 , The Secondary Chiklds during Humm was reong a categraniizer who won his wife Veronyman growning .",
+      "continuation_words": 114,
+      "words_per_second": 23.733600739618794,
+      "stdout": "6.443867 M parameters\nLoading checkpoint...\nResumed from iteration 2100\nEnter a starting phrase: \nduring the twenty patches against while Forory Rowley was qualified to Quainite to his beneiinous . Many clera version of Katyqu and premised a fighting which Henry at behelp Sankangham , requiring Sundismary peace , forcted a hailoviowitary message to Malahappu 's main green and feelings teater for the demoll army , but when I cancripous , two coins suffership personally loozly staff and groups . \n\n In July 2007 the Big studynists for the midfield ended ; Wallace pushed from Wunits Imob. sak wrote sevas heralf with HolCE scame @-@ 4 . However , 20 April 1 , The Secondary Chiklds during Humm was reong a categraniizer who won his wife Veronyman growning . \n",
+      "stderr": "",
+      "metrics": {
+        "chars": 662,
+        "words": 114,
+        "distinct_1": 0.8157894736842105,
+        "distinct_2": 0.9911504424778761,
+        "repeated_bigram_rate": 0.017699115044247787,
+        "repeated_trigram_rate": 0.0,
+        "punctuation_spacing": {
+          "space_before_period": 4,
+          "space_before_comma": 6,
+          "space_before_semicolon": 1,
+          "space_before_colon": 0,
+          "space_before_question": 0,
+          "space_before_exclamation": 0,
+          "space_after_open_paren": 0,
+          "space_before_close_paren": 0,
+          "artifact_at_period_at": 0
+        }
+      }
+    }
+  ]
+}

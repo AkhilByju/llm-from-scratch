@@ -1,0 +1,115 @@
+{
+  "input": "input.txt",
+  "max_chars": 50000,
+  "input_text_metrics": {
+    "chars": 50000,
+    "words": 9112,
+    "distinct_1": 0.26865671641791045,
+    "distinct_2": 0.7296674349687191,
+    "repeated_bigram_rate": 0.37383382724179565,
+    "repeated_trigram_rate": 0.12886937431394072,
+    "punctuation_spacing": {
+      "space_before_period": 332,
+      "space_before_comma": 470,
+      "space_before_semicolon": 9,
+      "space_before_colon": 37,
+      "space_before_question": 0,
+      "space_before_exclamation": 0,
+      "space_after_open_paren": 26,
+      "space_before_close_paren": 26,
+      "artifact_at_period_at": 1
+    }
+  },
+  "tokenizers": [
+    {
+      "vocab_path": "Vocabs/bpe_vocab.json",
+      "configured_vocab_size": 1000,
+      "actual_vocab_entries": 1268,
+      "sample_chars": 50000,
+      "sample_words": 9112,
+      "sample_tokens": 18289,
+      "tokens_per_word": 2.0071334503950835,
+      "unknown_tokens": 0,
+      "unknown_token_rate": 0.0,
+      "decoded_text_metrics": {
+        "chars": 50001,
+        "words": 9112,
+        "distinct_1": 0.26865671641791045,
+        "distinct_2": 0.7296674349687191,
+        "repeated_bigram_rate": 0.37383382724179565,
+        "repeated_trigram_rate": 0.12886937431394072,
+        "punctuation_spacing": {
+          "space_before_period": 332,
+          "space_before_comma": 470,
+          "space_before_semicolon": 9,
+          "space_before_colon": 37,
+          "space_before_question": 0,
+          "space_before_exclamation": 0,
+          "space_after_open_paren": 26,
+          "space_before_close_paren": 26,
+          "artifact_at_period_at": 1
+        }
+      }
+    },
+    {
+      "vocab_path": "Vocabs/bpe_vocab_500.json",
+      "configured_vocab_size": 578,
+      "actual_vocab_entries": 768,
+      "sample_chars": 50000,
+      "sample_words": 9112,
+      "sample_tokens": 21251,
+      "tokens_per_word": 2.3321992976294994,
+      "unknown_tokens": 0,
+      "unknown_token_rate": 0.0,
+      "decoded_text_metrics": {
+        "chars": 50001,
+        "words": 9112,
+        "distinct_1": 0.26865671641791045,
+        "distinct_2": 0.7296674349687191,
+        "repeated_bigram_rate": 0.37383382724179565,
+        "repeated_trigram_rate": 0.12886937431394072,
+        "punctuation_spacing": {
+          "space_before_period": 332,
+          "space_before_comma": 470,
+          "space_before_semicolon": 9,
+          "space_before_colon": 37,
+          "space_before_question": 0,
+          "space_before_exclamation": 0,
+          "space_after_open_paren": 26,
+          "space_before_close_paren": 26,
+          "artifact_at_period_at": 1
+        }
+      }
+    },
+    {
+      "vocab_path": "Vocabs/bpe_vocab_english_500.json",
+      "configured_vocab_size": 500,
+      "actual_vocab_entries": 603,
+      "sample_chars": 50000,
+      "sample_words": 9112,
+      "sample_tokens": 21244,
+      "tokens_per_word": 2.3314310798946445,
+      "unknown_tokens": 111,
+      "unknown_token_rate": 0.005225004707211448,
+      "decoded_text_metrics": {
+        "chars": 50445,
+        "words": 9112,
+        "distinct_1": 0.2681079894644425,
+        "distinct_2": 0.7295576775326529,
+        "repeated_bigram_rate": 0.3740533421139282,
+        "repeated_trigram_rate": 0.12886937431394072,
+        "punctuation_spacing": {
+          "space_before_period": 332,
+          "space_before_comma": 470,
+          "space_before_semicolon": 9,
+          "space_before_colon": 37,
+          "space_before_question": 0,
+          "space_before_exclamation": 0,
+          "space_after_open_paren": 26,
+          "space_before_close_paren": 26,
+          "artifact_at_period_at": 1
+        }
+      }
+    }
+  ]
+}
