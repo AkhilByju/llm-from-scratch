@@ -10,6 +10,8 @@ The current paper direction is:
 
 - `STUDY_PLAN.md`: research question, claims, metric protocol, and current findings.
 - `metrics.py`: cheap tokenizer and text diagnostics.
+- `model_registry.py`: loadable model definitions for the important historical checkpoints.
+- `pre_sweep.py`: checkpoint loadability and short-generation smoke tests.
 - `evaluate_fixed_prompts.py`: fixed-prompt generation evaluation for saved checkpoints.
 - `results/`: generated JSON outputs from the evaluation scripts.
 
@@ -19,8 +21,11 @@ Use the Anaconda Python because the local `.venv` does not currently have PyTorc
 
 ```bash
 /opt/anaconda3/bin/python research/metrics.py --max-chars 50000
-/opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --python /opt/anaconda3/bin/python
+/opt/anaconda3/bin/python research/pre_sweep.py --max-new-tokens 40
+/opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 40 --output research/results/fixed_prompt_eval_presweep.json
 ```
+
+For the final comparison run, increase `--max-new-tokens` to `200` or `300`.
 
 ## Publication Boundary
 
