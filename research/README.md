@@ -13,8 +13,10 @@ The current paper direction is:
 - `model_registry.py`: loadable model definitions for the important historical checkpoints.
 - `pre_sweep.py`: checkpoint loadability and short-generation smoke tests.
 - `evaluate_fixed_prompts.py`: fixed-prompt generation evaluation for saved checkpoints.
-- `build_comparison_csv.py`: flattens fixed-prompt JSON into a per-model/per-prompt CSV.
-- `build_summary_csv.py`: aggregates the comparison CSV into one row per model.
+- `build_comparison_csv.py`: flattens fixed-prompt JSON into a per-model/per-prompt CSV with raw and normalized artifact rates.
+- `build_summary_csv.py`: aggregates the comparison CSV into one row per model with normalized punctuation rates.
+- `evaluate_bpb.py`: computes bits-per-byte on a fixed source text sample.
+- `build_bpb_csv.py`: flattens BPB JSON into a table.
 - `results/`: generated JSON outputs from the evaluation scripts.
 
 ## Run
@@ -29,10 +31,24 @@ Use the Anaconda Python because the local `.venv` does not currently have PyTorc
 
 For the final comparison run, increase `--max-new-tokens` to `200` or `300`.
 
+The evaluator fixes generated token count, not generated word count. Use normalized artifact columns such as `*_per_100_words` or `*_per_1000_chars` for cross-tokenizer comparisons.
+
 ```bash
 /opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 200 --output research/results/fixed_prompt_eval_full.json
 /opt/anaconda3/bin/python research/build_comparison_csv.py --input research/results/fixed_prompt_eval_full.json --output research/results/comparison.csv
 /opt/anaconda3/bin/python research/build_summary_csv.py --input research/results/comparison.csv --output research/results/comparison_summary.csv
+```
+
+For the stronger repeated evaluation used in the paper:
+
+```bash
+/opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 200 --seeds 1337 2024 4242 --output research/results/fixed_prompt_eval_repeated.json
+/opt/anaconda3/bin/python research/build_comparison_csv.py --input research/results/fixed_prompt_eval_repeated.json --output research/results/comparison_repeated.csv
+/opt/anaconda3/bin/python research/build_summary_csv.py --input research/results/comparison_repeated.csv --output research/results/comparison_repeated_summary.csv
+/opt/anaconda3/bin/python research/evaluate_bpb.py --all --max-chars 50000 --output research/results/bpb_eval.json
+/opt/anaconda3/bin/python research/build_bpb_csv.py --input research/results/bpb_eval.json --output research/results/bpb_eval.csv
+/opt/anaconda3/bin/python research/metrics.py --max-chars 50000
+/opt/anaconda3/bin/python research/build_source_baseline_csv.py --input research/results/metrics.json --output research/results/source_baseline.csv
 ```
 
 ## Publication Boundary
