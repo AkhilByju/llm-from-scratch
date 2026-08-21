@@ -217,16 +217,34 @@ We present a small-compute empirical study of decoder-only transformer language 
 Current research tooling:
 
 - `research/metrics.py`: tokenizer, diversity, repetition, and punctuation-spacing diagnostics.
-- `research/evaluate_fixed_prompts.py`: fixed-prompt generation evaluation for the v3.1 checkpoint.
+- `research/model_registry.py`: model definitions for the important historical checkpoints.
+- `research/pre_sweep.py`: checkpoint loadability and short-generation smoke tests.
+- `research/evaluate_fixed_prompts.py`: fixed-prompt generation evaluation for any registered model.
 - `research/results/metrics.json`: tokenizer diagnostics on the first 50,000 characters of `input.txt`.
 - `research/results/fixed_prompt_eval_v3_1.json`: v3.1 fixed-prompt generation metrics.
+- `research/results/pre_sweep.json`: loadability report for the important historical checkpoints.
+- `research/results/fixed_prompt_eval_presweep.json`: short all-model fixed-prompt evaluation.
+- `research/results/model_registry.json`: exported model registry metadata.
 
 Run from the `wikitext/` repository root:
 
 ```bash
 /opt/anaconda3/bin/python research/metrics.py --max-chars 50000
-/opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --python /opt/anaconda3/bin/python
+/opt/anaconda3/bin/python research/pre_sweep.py --max-new-tokens 40
+/opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 40 --output research/results/fixed_prompt_eval_presweep.json
 ```
+
+Current pre-sweep status:
+
+| Model | Checkpoint | Status |
+| --- | --- | --- |
+| `v1_1_char_scaled` | `v1_models/best_model_v1_1.pth` | Loadable |
+| `v1_2_alibi_char` | `v1_models/best_model.pth` | Loadable |
+| `v2_2_rope_bpe` | `v2/v2_2/best_model.pth` | Loadable |
+| `v2_3_rope_bpe_scaled` | `v2/v2_3/best_model.pth` | Loadable |
+| `v2_4_rope_bpe_500_scaled` | `best_model.pth` | Loadable |
+| `v3_0_rope_english_bpe` | `v3/v3_0/best_modelv3_0.pth` | Loadable |
+| `v3_1_alibi_english_bpe` | `v3/v3_1/best_modelv3_1.pth` | Loadable |
 
 ## Next Step
 
