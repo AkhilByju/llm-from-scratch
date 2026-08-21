@@ -91,37 +91,47 @@ The current metrics are mostly train loss, validation loss, and qualitative note
    - Compute as `exp(validation_loss)`.
    - Report only when the tokenization is the same, or clearly warn that cross-tokenizer perplexity is not directly comparable.
 
-3. Parameter count
+3. Bits per byte
+   - Use source-text likelihood converted from nats to bits and normalized by UTF-8 bytes.
+   - This is more comparable across tokenizers than token-level loss because generated/evaluated token counts differ by tokenizer.
+
+4. Parameter count
    - Report trainable parameters and checkpoint state parameters.
 
-4. Training stability
+5. Training stability
    - Best validation loss.
    - Iteration of best validation loss.
    - Train-val gap at best checkpoint.
    - Plateau iteration, if visible from logs.
 
-5. Inference speed
+6. Inference speed
    - Tokens generated per second for a fixed prompt and fixed `max_new_tokens`.
    - Use CPU-only as the reference hardware unless MPS becomes available.
 
 ### Tokenization Metrics
 
-6. Token fertility
+7. Token fertility
    - Average tokens per whitespace-delimited word on the same text sample.
    - This helps explain why some vocabularies produce weird spacing or poor words.
 
-7. Unknown-token rate
+8. Unknown-token rate
    - Percentage of generated tokens that decode to `<unk>` or equivalent unknown markers.
    - Especially important for English-restricted BPE.
 
-8. Punctuation spacing error rate
+9. Punctuation spacing error rate
    - Count patterns like `" ,"`, `" ."`, `" @.@"`, or spaces around punctuation.
    - This directly measures a recurring qualitative failure mode in your notes.
    - Important caveat: the WikiText source text already contains some tokenization artifacts, so report this metric as a generated-text rate compared against the validation/source-text baseline rather than as an absolute model error count.
+   - Because all models generate a fixed number of tokens, not a fixed number of words or characters, raw punctuation artifact counts are not directly comparable across tokenizers. Report normalized rates such as artifacts per 100 generated words and artifacts per 1,000 generated characters.
+
+10. Corpus-grounded lexical/Unicode fragmentation
+   - Count generated characters that are outside the source corpus character set.
+   - Count Unicode replacement characters separately.
+   - Do not treat non-ASCII text as invalid by default, because the source corpus contains legitimate non-ASCII characters.
 
 ### Generation Metrics
 
-9. Fixed-prompt samples
+11. Fixed-prompt samples
    - Use the same prompts for every model:
      - `The history of language`
      - `In the early twentieth century`
@@ -129,11 +139,11 @@ The current metrics are mostly train loss, validation loss, and qualitative note
      - `According to the study`
      - empty prompt
 
-10. Repetition and diversity
+12. Repetition and diversity
    - Distinct-1 and Distinct-2 over generated text.
    - Repeated bigram/trigram rate.
 
-11. Qualitative rubric
+13. Qualitative rubric
    - Score each generated sample manually from 1-5 for:
      - word validity
      - sentence structure
@@ -221,14 +231,23 @@ Current research tooling:
 - `research/pre_sweep.py`: checkpoint loadability and short-generation smoke tests.
 - `research/evaluate_fixed_prompts.py`: fixed-prompt generation evaluation for any registered model.
 - `research/build_comparison_csv.py`: flattens full fixed-prompt JSON into a per-prompt comparison table.
-- `research/build_summary_csv.py`: aggregates per-prompt rows into model-level means and totals.
+- `research/build_summary_csv.py`: aggregates per-prompt rows into model-level means, totals, and normalized artifact rates.
+- `research/evaluate_bpb.py`: computes source-text bits-per-byte.
+- `research/build_bpb_csv.py`: flattens BPB evaluation into CSV.
+- `research/build_source_baseline_csv.py`: flattens source-corpus artifact baselines into CSV.
 - `research/results/metrics.json`: tokenizer diagnostics on the first 50,000 characters of `input.txt`.
 - `research/results/fixed_prompt_eval_v3_1.json`: v3.1 fixed-prompt generation metrics.
 - `research/results/pre_sweep.json`: loadability report for the important historical checkpoints.
 - `research/results/fixed_prompt_eval_presweep.json`: short all-model fixed-prompt evaluation.
 - `research/results/fixed_prompt_eval_full.json`: full all-model fixed-prompt evaluation with 200 generated tokens.
 - `research/results/comparison.csv`: per-model/per-prompt comparison table.
-- `research/results/comparison_summary.csv`: model-level aggregate comparison table.
+- `research/results/comparison_summary.csv`: model-level aggregate comparison table, including punctuation artifact rates per 100 generated words and per 1,000 generated characters.
+- `research/results/fixed_prompt_eval_repeated.json`: repeated stochastic generation evaluation with 10 prompts and 3 random seeds.
+- `research/results/comparison_repeated.csv`: per-output table for repeated stochastic generation.
+- `research/results/comparison_repeated_summary.csv`: model-level repeated generation summary with standard deviations.
+- `research/results/bpb_eval.json`: bits-per-byte evaluation.
+- `research/results/bpb_eval.csv`: bits-per-byte table.
+- `research/results/source_baseline.csv`: source-corpus baseline for punctuation, repetition, unknown markers, and corpus-grounded fragmentation.
 - `research/results/model_registry.json`: exported model registry metadata.
 
 Run from the `wikitext/` repository root:
@@ -240,6 +259,13 @@ Run from the `wikitext/` repository root:
 /opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 200 --output research/results/fixed_prompt_eval_full.json
 /opt/anaconda3/bin/python research/build_comparison_csv.py --input research/results/fixed_prompt_eval_full.json --output research/results/comparison.csv
 /opt/anaconda3/bin/python research/build_summary_csv.py --input research/results/comparison.csv --output research/results/comparison_summary.csv
+/opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 200 --seeds 1337 2024 4242 --output research/results/fixed_prompt_eval_repeated.json
+/opt/anaconda3/bin/python research/build_comparison_csv.py --input research/results/fixed_prompt_eval_repeated.json --output research/results/comparison_repeated.csv
+/opt/anaconda3/bin/python research/build_summary_csv.py --input research/results/comparison_repeated.csv --output research/results/comparison_repeated_summary.csv
+/opt/anaconda3/bin/python research/evaluate_bpb.py --all --max-chars 50000 --output research/results/bpb_eval.json
+/opt/anaconda3/bin/python research/build_bpb_csv.py --input research/results/bpb_eval.json --output research/results/bpb_eval.csv
+/opt/anaconda3/bin/python research/metrics.py --max-chars 50000
+/opt/anaconda3/bin/python research/build_source_baseline_csv.py --input research/results/metrics.json --output research/results/source_baseline.csv
 ```
 
 Current pre-sweep status:
