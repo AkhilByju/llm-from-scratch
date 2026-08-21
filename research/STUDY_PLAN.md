@@ -220,10 +220,15 @@ Current research tooling:
 - `research/model_registry.py`: model definitions for the important historical checkpoints.
 - `research/pre_sweep.py`: checkpoint loadability and short-generation smoke tests.
 - `research/evaluate_fixed_prompts.py`: fixed-prompt generation evaluation for any registered model.
+- `research/build_comparison_csv.py`: flattens full fixed-prompt JSON into a per-prompt comparison table.
+- `research/build_summary_csv.py`: aggregates per-prompt rows into model-level means and totals.
 - `research/results/metrics.json`: tokenizer diagnostics on the first 50,000 characters of `input.txt`.
 - `research/results/fixed_prompt_eval_v3_1.json`: v3.1 fixed-prompt generation metrics.
 - `research/results/pre_sweep.json`: loadability report for the important historical checkpoints.
 - `research/results/fixed_prompt_eval_presweep.json`: short all-model fixed-prompt evaluation.
+- `research/results/fixed_prompt_eval_full.json`: full all-model fixed-prompt evaluation with 200 generated tokens.
+- `research/results/comparison.csv`: per-model/per-prompt comparison table.
+- `research/results/comparison_summary.csv`: model-level aggregate comparison table.
 - `research/results/model_registry.json`: exported model registry metadata.
 
 Run from the `wikitext/` repository root:
@@ -232,6 +237,9 @@ Run from the `wikitext/` repository root:
 /opt/anaconda3/bin/python research/metrics.py --max-chars 50000
 /opt/anaconda3/bin/python research/pre_sweep.py --max-new-tokens 40
 /opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 40 --output research/results/fixed_prompt_eval_presweep.json
+/opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 200 --output research/results/fixed_prompt_eval_full.json
+/opt/anaconda3/bin/python research/build_comparison_csv.py --input research/results/fixed_prompt_eval_full.json --output research/results/comparison.csv
+/opt/anaconda3/bin/python research/build_summary_csv.py --input research/results/comparison.csv --output research/results/comparison_summary.csv
 ```
 
 Current pre-sweep status:
