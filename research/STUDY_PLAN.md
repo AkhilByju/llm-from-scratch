@@ -94,6 +94,8 @@ The current metrics are mostly train loss, validation loss, and qualitative note
 3. Bits per byte
    - Use source-text likelihood converted from nats to bits and normalized by UTF-8 bytes.
    - This is more comparable across tokenizers than token-level loss because generated/evaluated token counts differ by tokenizer.
+   - Publication BPB should be reported on the fixed held-out source byte span, not on the diagnostic prefix of `input.txt`.
+   - Current held-out BPB span: bytes `11,000,000` through `11,050,000` of `input.txt`, SHA-256 `a1f675a4d47ea1ff1d7cb48d5591b03594a85cfa1f66aa3a4c820d01d552378c`.
 
 4. Parameter count
    - Report trainable parameters and checkpoint state parameters.
@@ -245,9 +247,10 @@ Current research tooling:
 - `research/results/fixed_prompt_eval_repeated.json`: repeated stochastic generation evaluation with 10 prompts and 3 random seeds.
 - `research/results/comparison_repeated.csv`: per-output table for repeated stochastic generation.
 - `research/results/comparison_repeated_summary.csv`: model-level repeated generation summary with standard deviations.
-- `research/results/bpb_eval.json`: bits-per-byte evaluation.
-- `research/results/bpb_eval.csv`: bits-per-byte table.
-- `research/results/source_baseline.csv`: source-corpus baseline for punctuation, repetition, unknown markers, and corpus-grounded fragmentation.
+- `research/results/bpb_eval_heldout.json`: held-out bits-per-byte evaluation on the same source byte span for every model.
+- `research/results/bpb_eval_heldout.csv`: held-out bits-per-byte table.
+- `research/results/metrics_heldout.json`: held-out source-corpus tokenizer and text diagnostics.
+- `research/results/source_baseline_heldout.csv`: held-out source-corpus baseline for punctuation, repetition, unknown markers, and corpus-grounded fragmentation.
 - `research/results/model_registry.json`: exported model registry metadata.
 
 Run from the `wikitext/` repository root:
@@ -262,10 +265,10 @@ Run from the `wikitext/` repository root:
 /opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 200 --seeds 1337 2024 4242 --output research/results/fixed_prompt_eval_repeated.json
 /opt/anaconda3/bin/python research/build_comparison_csv.py --input research/results/fixed_prompt_eval_repeated.json --output research/results/comparison_repeated.csv
 /opt/anaconda3/bin/python research/build_summary_csv.py --input research/results/comparison_repeated.csv --output research/results/comparison_repeated_summary.csv
-/opt/anaconda3/bin/python research/evaluate_bpb.py --all --max-chars 50000 --output research/results/bpb_eval.json
-/opt/anaconda3/bin/python research/build_bpb_csv.py --input research/results/bpb_eval.json --output research/results/bpb_eval.csv
-/opt/anaconda3/bin/python research/metrics.py --max-chars 50000
-/opt/anaconda3/bin/python research/build_source_baseline_csv.py --input research/results/metrics.json --output research/results/source_baseline.csv
+/opt/anaconda3/bin/python research/evaluate_bpb.py --all --start-byte 11000000 --max-bytes 50000 --output research/results/bpb_eval_heldout.json
+/opt/anaconda3/bin/python research/build_bpb_csv.py --input research/results/bpb_eval_heldout.json --output research/results/bpb_eval_heldout.csv
+/opt/anaconda3/bin/python research/metrics.py --start-byte 11000000 --max-bytes 50000 --output research/results/metrics_heldout.json
+/opt/anaconda3/bin/python research/build_source_baseline_csv.py --input research/results/metrics_heldout.json --output research/results/source_baseline_heldout.csv
 ```
 
 Current pre-sweep status:
