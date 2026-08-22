@@ -45,11 +45,13 @@ For the stronger repeated evaluation used in the paper:
 /opt/anaconda3/bin/python research/evaluate_fixed_prompts.py --all --max-new-tokens 200 --seeds 1337 2024 4242 --output research/results/fixed_prompt_eval_repeated.json
 /opt/anaconda3/bin/python research/build_comparison_csv.py --input research/results/fixed_prompt_eval_repeated.json --output research/results/comparison_repeated.csv
 /opt/anaconda3/bin/python research/build_summary_csv.py --input research/results/comparison_repeated.csv --output research/results/comparison_repeated_summary.csv
-/opt/anaconda3/bin/python research/evaluate_bpb.py --all --max-chars 50000 --output research/results/bpb_eval.json
-/opt/anaconda3/bin/python research/build_bpb_csv.py --input research/results/bpb_eval.json --output research/results/bpb_eval.csv
-/opt/anaconda3/bin/python research/metrics.py --max-chars 50000
-/opt/anaconda3/bin/python research/build_source_baseline_csv.py --input research/results/metrics.json --output research/results/source_baseline.csv
+/opt/anaconda3/bin/python research/evaluate_bpb.py --all --start-byte 11000000 --max-bytes 50000 --output research/results/bpb_eval_heldout.json
+/opt/anaconda3/bin/python research/build_bpb_csv.py --input research/results/bpb_eval_heldout.json --output research/results/bpb_eval_heldout.csv
+/opt/anaconda3/bin/python research/metrics.py --start-byte 11000000 --max-bytes 50000 --output research/results/metrics_heldout.json
+/opt/anaconda3/bin/python research/build_source_baseline_csv.py --input research/results/metrics_heldout.json --output research/results/source_baseline_heldout.csv
 ```
+
+The BPB and source-baseline commands above evaluate the exact same held-out source byte span for every model/baseline: bytes `11,000,000` through `11,050,000` of `input.txt`. Earlier prefix-based BPB/source-baseline runs should be treated as diagnostic only.
 
 ## Publication Boundary
 
