@@ -33,6 +33,28 @@ def load_text(path, max_chars=None):
     return text
 
 
+def load_text_bytes(path, start_byte=0, max_bytes=None):
+    raw = Path(path).read_bytes()
+    end = len(raw) if max_bytes is None else min(len(raw), start_byte + max_bytes)
+    while start_byte < len(raw):
+        try:
+            raw[:start_byte].decode("utf-8")
+            break
+        except UnicodeDecodeError:
+            start_byte += 1
+    while end > start_byte:
+        try:
+            raw[:end].decode("utf-8")
+            break
+        except UnicodeDecodeError:
+            end -= 1
+    return raw[start_byte:end].decode("utf-8"), start_byte, end
+
+
+def corpus_character_set(path="input.txt"):
+    return set(Path(path).read_text(encoding="utf-8"))
+
+
 def ngrams(items, n):
     return [tuple(items[i:i + n]) for i in range(max(0, len(items) - n + 1))]
 
@@ -60,16 +82,46 @@ def punctuation_spacing_counts(text):
     }
 
 
-def text_metrics(text):
+def character_fragmentation(text, allowed_chars=None):
+    chars = list(text)
+    non_ascii = sum(1 for ch in chars if ord(ch) > 127)
+    replacement = text.count("\ufffd")
+    outside_corpus = 0
+    if allowed_chars is not None:
+        outside_corpus = sum(1 for ch in chars if ch not in allowed_chars)
+
+    return {
+        "non_ascii_chars": non_ascii,
+        "non_ascii_rate": non_ascii / max(1, len(chars)),
+        "replacement_characters": replacement,
+        "replacement_character_rate": replacement / max(1, len(chars)),
+        "outside_corpus_chars": outside_corpus,
+        "outside_corpus_char_rate": outside_corpus / max(1, len(chars)),
+    }
+
+
+def unknown_marker_counts(text):
+    count = text.count("<unk>")
+    return {
+        "unknown_markers": count,
+        "unknown_markers_per_100_words": count / max(1, len(re.findall(r"\S+", text))) * 100,
+        "unknown_markers_per_1000_chars": count / max(1, len(text)) * 1000,
+    }
+
+
+def text_metrics(text, allowed_chars=None):
     words = re.findall(r"\S+", text)
     return {
         "chars": len(text),
+        "bytes": len(text.encode("utf-8")),
         "words": len(words),
         "distinct_1": distinct_n(words, 1),
         "distinct_2": distinct_n(words, 2),
         "repeated_bigram_rate": repeated_ngram_rate(words, 2),
         "repeated_trigram_rate": repeated_ngram_rate(words, 3),
         "punctuation_spacing": punctuation_spacing_counts(text),
+        "unknown_markers": unknown_marker_counts(text),
+        "character_fragmentation": character_fragmentation(text, allowed_chars),
     }
 
 
@@ -92,7 +144,7 @@ def tokenizer_metrics(vocab_path, text):
         "tokens_per_word": token_count / max(1, len(words)),
         "unknown_tokens": unk_count,
         "unknown_token_rate": unk_count / max(1, token_count),
-        "decoded_text_metrics": text_metrics(tokenizer.decode(ids)),
+        "decoded_text_metrics": text_metrics(tokenizer.decode(ids), set(text)),
     }
 
 
@@ -112,6 +164,16 @@ def main():
         help="Maximum input characters to evaluate for cheap local runs.",
     )
     parser.add_argument(
+        "--start-byte",
+        type=int,
+        help="Optional UTF-8 source start byte. Uses byte span mode when provided.",
+    )
+    parser.add_argument(
+        "--max-bytes",
+        type=int,
+        help="Maximum bytes to evaluate in byte span mode.",
+    )
+    parser.add_argument(
         "--vocab",
         action="append",
         default=[],
@@ -128,7 +190,17 @@ def main():
     )
     args = parser.parse_args()
 
-    text = load_text(args.input, args.max_chars)
+    if args.start_byte is not None:
+        text, source_start_byte, source_end_byte = load_text_bytes(
+            args.input,
+            args.start_byte,
+            args.max_bytes,
+        )
+    else:
+        text = load_text(args.input, args.max_chars)
+        source_start_byte = None
+        source_end_byte = None
+    allowed_chars = set(text)
     vocab_paths = args.vocab or [
         "Vocabs/bpe_vocab.json",
         "Vocabs/bpe_vocab_500.json",
@@ -138,7 +210,12 @@ def main():
     result = {
         "input": args.input,
         "max_chars": args.max_chars,
-        "input_text_metrics": text_metrics(text),
+        "start_byte": args.start_byte,
+        "max_bytes": args.max_bytes,
+        "source_start_byte": source_start_byte,
+        "source_end_byte": source_end_byte,
+        "source_corpus_character_count": len(allowed_chars),
+        "input_text_metrics": text_metrics(text, allowed_chars),
         "tokenizers": [
             tokenizer_metrics(Path(vocab_path), text)
             for vocab_path in vocab_paths
@@ -149,7 +226,7 @@ def main():
         generated = load_text(args.generated_text)
         result["generated_text"] = {
             "path": args.generated_text,
-            "metrics": text_metrics(generated),
+            "metrics": text_metrics(generated, allowed_chars),
         }
 
     output_path = Path(args.output)
